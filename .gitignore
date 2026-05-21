@@ -1,0 +1,23 @@
+# Project folders
+.idea/
+.vscode/
+
+# Build directories
+cmake-build-*/
+build/
+out/
+
+# CMake
+CMakeFiles/
+CMakeCache.txt
+
+# Compiler artefacts
+*.o
+*.obj
+*.a
+*.so
+*.dll
+*.exe
+
+# Logs
+*.log
