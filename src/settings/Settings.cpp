@@ -6,18 +6,27 @@
 
 Settings::Settings()
 {
+    engineName = "Vengine";
+    engineVersion = VK_MAKE_VERSION(0, 1, 0);
+    appName = "untitled";
+    appVersion = VK_MAKE_VERSION(1, 0, 0);
     windowHeight = 800;
     windowWidth = 600;
     windowTitle = "untitled";
 }
 
-Settings::~Settings() = default;
+const std::string& Settings::getEngineName() const { return engineName; }
+uint32_t Settings::getEngineVersion() const { return engineVersion; }
+
+
+void Settings::setAppName(const std::string& title) { appName = title; }
+const std::string& Settings::getAppName() const { return appName; }
+void Settings::setAppVersion(const uint32_t version) { appVersion = version; }
+uint32_t Settings::getAppVersion() const { return appVersion; }
 
 void Settings::setWindowTitle(const std::string& title) { windowTitle = title; }
-std::string Settings::getWindowTitle() { return windowTitle; }
-
-void Settings::setWindowHeight(const int height) { windowHeight = height; }
-int Settings::getWindowHeight() const { return windowHeight; }
-
-void Settings::setWindowWidth(const int width) { windowWidth = width; }
-int Settings::getWindowWidth() const { return windowWidth; }
+const std::string& Settings::getWindowTitle() const { return windowTitle; }
+void Settings::setWindowHeight(const uint32_t height) { windowHeight = height; }
+uint32_t Settings::getWindowHeight() const { return windowHeight; }
+void Settings::setWindowWidth(const uint32_t width) { windowWidth = width; }
+uint32_t Settings::getWindowWidth() const { return windowWidth; }

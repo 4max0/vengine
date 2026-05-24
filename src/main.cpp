@@ -6,7 +6,7 @@ int main()
 {
     try
     {
-        Engine app;
+        const Engine app;
         app.run();
     }
     catch (const std::exception& e)
