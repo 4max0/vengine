@@ -17,20 +17,19 @@ import vulkan_hpp;
 class Engine
 {
 public:
-    Engine();
-    ~Engine();
-    void run() const;
+    void run();
 
 private:
     Settings settings;
-    GLFWwindow* glfwWindowInstance;
+    GLFWwindow* glfwWindowInstance = nullptr;
     vk::raii::Context vulkanContext;
-    vk::raii::Instance vulkanInstance;
-    // const std::vector<char const*> vulkanValidationLayers = {"VK_LAYER_KHRONOS_validation"};
+    vk::raii::Instance vulkanInstance = nullptr;
+    const std::vector<char const*> vulkanValidationLayers = {"VK_LAYER_KHRONOS_validation"};
 
-    GLFWwindow* initGLFW();
+    void initGLFW();
     static void framebufferResizeCallback(GLFWwindow* window, int width, int height);
-    [[nodiscard]] vk::raii::Instance initVulkanInstance() const;
+    void initVulkanInstance();
+    static std::vector<const char*> getRequiredInstanceExtensions();
     // void initVulkanSurface();
     // void initVulkanPhysicalDevice();
     // void initVulkanLogicalDevice();
@@ -39,6 +38,7 @@ private:
     // void initVulkanPipeline();
     // void initVulkanCommandPool();
     // void initVulkanCommandBuffer();
+    void MainLoop() const;
 };
 
 #endif // UNTITLED_ENGINE_H
