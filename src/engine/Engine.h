@@ -23,13 +23,14 @@ public:
 
 private:
     Settings settings;
-    GLFWwindow* instanceWindow;
-    vk::raii::Context contextVulkan;
-    vk::raii::Instance instanceVulkan;
+    GLFWwindow* glfwWindowInstance;
+    vk::raii::Context vulkanContext;
+    vk::raii::Instance vulkanInstance;
+    // const std::vector<char const*> vulkanValidationLayers = {"VK_LAYER_KHRONOS_validation"};
 
     GLFWwindow* initGLFW();
     static void framebufferResizeCallback(GLFWwindow* window, int width, int height);
-    vk::raii::Instance initVulkanInstance() const;
+    [[nodiscard]] vk::raii::Instance initVulkanInstance() const;
     // void initVulkanSurface();
     // void initVulkanPhysicalDevice();
     // void initVulkanLogicalDevice();

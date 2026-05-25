@@ -14,6 +14,8 @@ add_executable(untitled
         src/engine/Engine.h
         src/settings/Settings.cpp
         src/settings/Settings.h
+        src/settings/Debug.cpp
+        src/settings/Debug.h
 )
 
 target_link_libraries(untitled

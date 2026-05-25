@@ -3,21 +3,20 @@
 //
 
 #include "Settings.h"
+#include "Debug.h"
+#include "vulkan/vulkan_core.h"
 
-Settings::Settings()
+Settings::Settings() :
+    engineName("Vengine"), engineVersion(VK_MAKE_VERSION(0, 1, 0)), appName("untitled"),
+    appVersion(VK_MAKE_VERSION(1, 0, 0)), windowTitle("untitled"), windowWidth(600), windowHeight(800),
+    debug(debugYesOrNo())
 {
-    engineName = "Vengine";
-    engineVersion = VK_MAKE_VERSION(0, 1, 0);
-    appName = "untitled";
-    appVersion = VK_MAKE_VERSION(1, 0, 0);
-    windowHeight = 800;
-    windowWidth = 600;
-    windowTitle = "untitled";
+    debugLevel.addLevel(Debug::Level::ERROR);
+    debugLevel.addLevel(Debug::Level::WARNING);
 }
 
 const std::string& Settings::getEngineName() const { return engineName; }
 uint32_t Settings::getEngineVersion() const { return engineVersion; }
-
 
 void Settings::setAppName(const std::string& title) { appName = title; }
 const std::string& Settings::getAppName() const { return appName; }
@@ -30,3 +29,14 @@ void Settings::setWindowHeight(const uint32_t height) { windowHeight = height; }
 uint32_t Settings::getWindowHeight() const { return windowHeight; }
 void Settings::setWindowWidth(const uint32_t width) { windowWidth = width; }
 uint32_t Settings::getWindowWidth() const { return windowWidth; }
+
+bool Settings::isDebug() const { return debug; }
+
+bool Settings::debugYesOrNo()
+{
+#ifndef NDEBUG
+    return true;
+#else
+    return false;
+#endif
+}

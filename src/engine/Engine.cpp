@@ -14,7 +14,7 @@ import vulkan_hpp;
 #include <GLFW/glfw3.h>
 #include <iostream>
 
-Engine::Engine() : settings(Settings()), instanceWindow(initGLFW()), instanceVulkan(initVulkanInstance())
+Engine::Engine() : settings(Settings()), glfwWindowInstance(initGLFW()), vulkanInstance(initVulkanInstance())
 {
     // Surface mit GLFW
     // Physical Device auswählen
@@ -28,14 +28,14 @@ Engine::Engine() : settings(Settings()), instanceWindow(initGLFW()), instanceVul
 
 Engine::~Engine()
 {
-    glfwDestroyWindow(instanceWindow);
+    glfwDestroyWindow(glfwWindowInstance);
     glfwTerminate();
 }
 
 void Engine::run() const
 {
     std::cout << "hello world";
-    while (!glfwWindowShouldClose(instanceWindow))
+    while (!glfwWindowShouldClose(glfwWindowInstance))
     {
         glfwPollEvents();
         // TODO:
@@ -87,7 +87,7 @@ vk::raii::Instance Engine::initVulkanInstance() const
     // Get the vulkans extensions needed by GLFW
     uint32_t glfwExtensionCount = 0;
     const char** glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
-    auto extensionProperties = contextVulkan.enumerateInstanceExtensionProperties();
+    auto extensionProperties = vulkanContext.enumerateInstanceExtensionProperties();
     for (uint32_t i = 0; i < glfwExtensionCount; ++i)
     {
         if (std::ranges::none_of(extensionProperties, [glfwExtension = glfwExtensions[i]](const auto& extensionProperty)
@@ -97,17 +97,42 @@ vk::raii::Instance Engine::initVulkanInstance() const
         }
     }
 
-    // print the extensions available
-    const auto extensions = contextVulkan.enumerateInstanceExtensionProperties();
-    std::cout << "available extensions:\n";
-    for (const auto& extension : extensions)
+
+    if (settings.debugLevel.check(settings.debugLevel.VERBOSE))
     {
-        std::cout << '\t' << extension.extensionName << '\n';
+        // print the extensions available
+        const auto extensions = vulkanContext.enumerateInstanceExtensionProperties();
+        std::cout << "available extensions:\n";
+        for (const auto& extension : extensions)
+        {
+            std::cout << '\t' << extension.extensionName << '\n';
+        }
     }
+
+    // // Get the required layers
+    // std::vector<char const*> requiredLayers;
+    // if (settings.isDebug())
+    // {
+    //     requiredLayers.assign(vulkanValidationLayers.begin(), vulkanValidationLayers.end());
+    // }
+    //
+    // // Check if the required layers are supported by the Vulkan implementation.
+    // auto layerProperties = vulkanContext.enumerateInstanceLayerProperties();
+    // const auto unsupportedLayerIt = std::ranges::find_if(
+    //     requiredLayers,
+    //     [&layerProperties](auto const& requiredLayer)
+    //     {
+    //         return std::ranges::none_of(layerProperties, [requiredLayer](auto const& layerProperty)
+    //                                     { return strcmp(layerProperty.layerName, requiredLayer) == 0; });
+    //     });
+    // if (unsupportedLayerIt != requiredLayers.end())
+    // {
+    //     throw std::runtime_error("Required Validation Layer not supported: " + std::string(*unsupportedLayerIt));
+    // }
 
     // Info about the vulkan instance
     const vk::InstanceCreateInfo createInfo({}, &appInfo, 0, nullptr, glfwExtensionCount, glfwExtensions);
     // Vulkan instance
-    auto instance = vk::raii::Instance(contextVulkan, createInfo);
+    auto instance = vk::raii::Instance(vulkanContext, createInfo);
     return instance;
 }

@@ -6,11 +6,12 @@
 #define UNTITLED_SETTINGS_H
 
 #include <string>
-#include <vulkan/vulkan_core.h>
+#include "Debug.h"
 
 class Settings
 {
 public:
+    Debug debugLevel;
     Settings();
 
     [[nodiscard]] const std::string& getEngineName() const;
@@ -28,6 +29,8 @@ public:
     void setWindowWidth(uint32_t width);
     [[nodiscard]] uint32_t getWindowWidth() const;
 
+    [[nodiscard]] bool isDebug() const;
+
 private:
     std::string engineName;
     uint32_t engineVersion;
@@ -38,7 +41,10 @@ private:
     std::string windowTitle;
     uint32_t windowWidth;
     uint32_t windowHeight;
-};
 
+    bool debug;
+
+    [[nodiscard]] static bool debugYesOrNo();
+};
 
 #endif // UNTITLED_SETTINGS_H
