@@ -1,6 +1,9 @@
-//
-// Created by max on 22.05.26.
-//
+/**
+ * Created by max on 22.05.26.
+ *
+ * @file Engine.cpp
+ * @brief Implementation of the Engine class.
+ */
 
 #include "Engine.h"
 
@@ -18,10 +21,10 @@ void Engine::run()
 {
     initGLFW();
     initVulkanInstance();
-    MainLoop();
+    mainLoop();
 }
 
-void Engine::MainLoop() const
+void Engine::mainLoop() const
 {
     std::cout << "hello world";
     while (!glfwWindowShouldClose(glfwWindowInstance))
@@ -64,6 +67,16 @@ void Engine::framebufferResizeCallback(GLFWwindow* window, const int width, cons
     std::cout << "New size -- width " << width << " height " << height << std::endl;
     engine->settings.setWindowWidth(width);
     engine->settings.setWindowHeight(height);
+}
+
+VKAPI_ATTR vk::Bool32 VKAPI_CALL Engine::debugCallback(vk::DebugUtilsMessageSeverityFlagBitsEXT severity,
+                                                       const vk::DebugUtilsMessageTypeFlagsEXT type,
+                                                       const vk::DebugUtilsMessengerCallbackDataEXT* pCallbackData,
+                                                       void* pUserData)
+{
+    std::cerr << "validation layer: type " << to_string(type) << " msg: " << pCallbackData->pMessage << std::endl;
+
+    return vk::False;
 }
 
 void Engine::initVulkanInstance()
@@ -110,8 +123,7 @@ void Engine::initVulkanInstance()
         throw std::runtime_error("Required extension not supported: " + std::string(*unsupportedPropertyIt));
     }
 
-
-    if (settings.debugLevel.check(settings.debugLevel.VERBOSE))
+    if (settings.debugLevel.check(Debug::VERBOSE))
     {
         // print the extensions available
         const auto extensions = vulkanContext.enumerateInstanceExtensionProperties();
@@ -130,12 +142,16 @@ void Engine::initVulkanInstance()
     vulkanInstance = vk::raii::Instance(vulkanContext, createInfo);
 }
 
-std::vector<const char*> Engine::getRequiredInstanceExtensions()
+std::vector<const char*> Engine::getRequiredInstanceExtensions() const
 {
     uint32_t glfwExtensionCount = 0;
     const auto glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
 
     std::vector extensions(glfwExtensions, glfwExtensions + glfwExtensionCount);
+    if (settings.isDebug())
+    {
+        extensions.push_back(vk::EXTDebugUtilsExtensionName);
+    }
 
     return extensions;
 }

@@ -11,6 +11,9 @@ out/
 CMakeFiles/
 CMakeCache.txt
 
+# Doxygen
+doc/
+
 # Compiler artefacts
 *.o
 *.obj

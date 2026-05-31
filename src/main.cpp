@@ -1,3 +1,10 @@
+/**
+ * Created by max on 25.05.26.
+ *
+ * @file main.cpp
+ * @brief The main class
+ */
+
 #include <exception>
 #include <iostream>
 

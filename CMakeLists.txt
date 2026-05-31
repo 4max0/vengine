@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+find_package(Doxygen REQUIRED)
 find_package(glfw3 REQUIRED)
 find_package(Vulkan REQUIRED)
 
@@ -22,4 +23,11 @@ target_link_libraries(untitled
         PRIVATE
         glfw
         Vulkan::Vulkan
+)
+
+add_custom_target(doc
+        COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_SOURCE_DIR}/Doxyfile
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        COMMENT "Generating Doxygen documentation"
+        VERBATIM
 )

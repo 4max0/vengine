@@ -1,6 +1,9 @@
-//
-// Created by max on 25.05.26.
-//
+/**
+ * Created by max on 25.05.26.
+ *
+ * @file Debug.cpp
+ * @brief Implementation of the Debug class.
+ */
 
 #include "Debug.h"
 

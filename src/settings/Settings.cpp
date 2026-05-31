@@ -1,6 +1,9 @@
-//
-// Created by max on 22.05.26.
-//
+/**
+ * Created by max on 22.05.26.
+ *
+ * @file Settings.cpp
+ * @brief Implementation of the Settings class.
+ */
 
 #include "Settings.h"
 #include "Debug.h"
